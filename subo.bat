@@ -19,6 +19,6 @@ git push
 
 
 echo.
-echo 🚀 Compilación y empaquetado completado. Archivo: main.zip
+echo Compilacion y empaquetado completado. Archivo: main.zip
 pause
 
