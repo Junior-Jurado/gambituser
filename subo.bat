@@ -1,28 +1,25 @@
 @echo off
-echo Iniciando proceso de despliegue...
- 
-git add . 
-git commit -m "Ultimo Commit"
-git push
- 
+REM Configura el entorno para compilar para Linux (AWS Lambda corre en Amazon Linux)
 set GOOS=linux
 set GOARCH=amd64
- 
-echo Compilando Go...
+
+REM Compila el binario con el nombre correcto: bootstrap
 go build -o bootstrap main.go
- 
-if not exist bootstrap (
-    echo Error: No se generó el archivo bootstrap. Verifica que main.go esté en la carpeta.
-    exit /b 1
-)
- 
-echo Creando archivo ZIP...
-powershell Compress-Archive -Path bootstrap -DestinationPath bootstrap.zip -Force
- 
-if not exist bootstrap.zip (
-    echo Error: No se generó el archivo bootstrap.zip. Verifica la compresión.
-    exit /b 1
-)
- 
-echo Despliegue exitoso. Subir bootstrap.zip a AWS Lambda manualmente o mediante AWS CLI.
-exit /b 0
+
+REM Borra cualquier ZIP anterior
+if exist main.zip del main.zip
+
+REM Crea el ZIP que contiene solo el archivo bootstrap
+tar.exe -a -cf main.zip bootstrap
+
+REM Limpieza opcional del binario local
+REM del bootstrap
+
+REM Git push opcional
+git add .
+git commit -m "Último Commit"
+git push
+
+echo.
+echo ✅ ¡Listo! main.zip generado con bootstrap y código subido a Git.
+pause
