@@ -18,11 +18,15 @@ func SignUp(sign models.SignUp) error {
 
 	defer Db.Close()
 
-	sentencia := "INSERT INTO users (User_Email, User_UUID, User_DateAdd) VALUES ('" +
-	sign.UserEmail + "','" + sign.UserUUID + "','" + tools.FechaMySQL() + "')"
-	fmt.Println(sentencia)
+	
+	query := fmt.Sprintf(`
+		INSERT INTO users (User_Email, User_UUID, User_DateAdd) VALUES ('%v' , '%v', '%v')`,
+		sign.UserEmail,
+		sign.UserUUID,
+		tools.FechaMySQL(),
+	)
 
-	_, err = Db.Exec(sentencia)
+	_, err = Db.Exec(query)
 	if err != nil {
 		fmt.Println(err.Error())
 		return err
